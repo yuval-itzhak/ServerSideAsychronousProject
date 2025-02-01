@@ -100,13 +100,3 @@ router.get("/report", async (req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-

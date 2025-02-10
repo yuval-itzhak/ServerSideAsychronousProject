@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api', require('./routes/costRoutes'));
 app.use('/api', require('./routes/userRoutes'));
 app.use('/api', require('./routes/aboutRoutes'));
+app.use(errorHandler);
 
 // Start Server
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

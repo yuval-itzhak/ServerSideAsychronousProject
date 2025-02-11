@@ -6,12 +6,12 @@ const router = express.Router();
 router.get('/about' , (req, res) => {
     res.json([
         {
-            first_name: "Yuval" ,
-            last_name: "Itzhak",
+            firstName: "Yuval" ,
+            lastName: "Itzhak",
         },
         {
-            first_name: "Matan" ,
-            last_name: "Zror",
+            firstName: "Matan" ,
+            lastName: "Zror",
         }
     ])
 })

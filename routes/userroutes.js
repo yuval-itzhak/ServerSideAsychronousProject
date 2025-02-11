@@ -24,15 +24,15 @@ router.get('/users/:id', handleAsync(async (req, res) => {
 
     // Calculate the total expenses of the user
     const totalCosts = await Cost.aggregate([
-        { $match: { user_id: id } },
+        { $match: { userId: id } },
         { $group: { _id: null, total: { $sum: '$sum' } } }
     ]);
 
     const total = totalCosts.length > 0 ? totalCosts[0].total : 0;
 
     res.status(200).json({
-        first_name: user.first_name,
-        last_name: user.last_name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         id: user.id,
         total
     });

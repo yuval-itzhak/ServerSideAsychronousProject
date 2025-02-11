@@ -8,11 +8,11 @@ const router = express.Router();
 
 // POST route to add a new cost item
 router.post('/add', handleAsync(async (req, res) => {
-    const { description, category, user_id, sum, date } = req.body;
+    const { description, category, userId, sum, date } = req.body;
     const currentDate = new Date();
 
     // Validate required fields
-    if (!description || !user_id || !sum || !date) {
+    if (!description || !userId || !sum || !date) {
         throw new Error('Missing required fields. Date must be provided in YYYY-MM-DD format.');
     }
 
@@ -50,7 +50,7 @@ router.post('/add', handleAsync(async (req, res) => {
         throw new Error('Cost date must be either from the current month or from the last month (only if today is within the first 5 days of the current month).');
     }
 
-    const newCost = new Cost({ description, category, user_id, sum, date: costDate });
+    const newCost = new Cost({ description, category, userId, sum, date: costDate });
     await newCost.save();
 
     res.status(201).json(newCost);
@@ -107,18 +107,18 @@ router.get('/report', handleAsync(async (req, res) => {
     const lastDayOfMonth = new Date(year, month, 0);
     const daysSinceEndOfMonth = (now - lastDayOfMonth) / (1000 * 60 * 60 * 24);
 
-    if (daysSinceEndOfMonth > 5 && user.computed_costs?.get(requestMonth)) {
+    if (daysSinceEndOfMonth > 5 && user.computedCosts?.get(requestMonth)) {
         return res.status(200).json({
-            user_id: id,
+            userId: id,
             year,
             month,
-            costs: user.computed_costs?.get(requestMonth)
+            costs: user.computedCosts?.get(requestMonth)
         });
     }
 
     // Fetch costs for the given month
     const costs = await Cost.find({
-        user_id: id,
+        userId: id,
         date: {
             $gte: new Date(year, month - 1, 1),
             $lt: new Date(year, month, 1)
@@ -148,10 +148,10 @@ router.get('/report', handleAsync(async (req, res) => {
 
     // Save the report if more than 5 days have passed
     if (daysSinceEndOfMonth > 5) {
-        await User.updateOne({ id }, { $set: { [`computed_costs.${requestMonth}`]: report } });
+        await User.updateOne({ id }, { $set: { [`computedCosts.${requestMonth}`]: report } });
     }
 
-    res.status(200).json({ user_id: id, year, month, costs: report });
+    res.status(200).json({ userId: id, year, month, costs: report });
 }));
 
 module.exports = router;

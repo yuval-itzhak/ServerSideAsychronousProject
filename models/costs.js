@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const costSchema = new Schema({
     description: {type: String, required: true},
     category: {type: String, required: true, enum: ['Food', 'Health', 'Housing', 'Sport', 'Education']}, // Only one of these values is valid
-    user_id: {type: String, required: true},
+    userId: {type: String, required: true},
     sum: {type: Number, required: true},
     date: {type: Date, required: true, default: Date.now}, // Default value is the current date if not provided
 });

@@ -136,14 +136,19 @@ router.get('/report', handleAsync(async (req, res) => {
     });
 
     costs.forEach(cost => {
-        if (report.hasOwnProperty(cost.category)) {
-            report[cost.category].push({
-                sum: cost.sum,
-                description: cost.description,
-                day: new Date(cost.date).getDate()
-            });
+        report[cost.category].push({
+            sum: cost.sum,
+            description: cost.description,
+            day: new Date(cost.date).getDate()
+        });
+    });
+    //replacing an empty array with 0
+    categories.forEach(category => {
+        if (!Array.isArray(report[category]) || report[category].length === 0) {
+            report[category] = 0;
         }
     });
+
 
 
     // Save the report if more than 5 days have passed

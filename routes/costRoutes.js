@@ -105,12 +105,12 @@ router.get('/report', handleAsync(async (req, res) => {
     const lastDayOfMonth = new Date(year, month, 0);
     const daysSinceEndOfMonth = (now - lastDayOfMonth) / (1000 * 60 * 60 * 24);
 
-    if (daysSinceEndOfMonth > 5 && user.computed_costs?.[requestMonth]) {
+    if (daysSinceEndOfMonth > 5 && user.computed_costs?.get(requestMonth)) {
         return res.status(200).json({
             user_id: id,
             year,
             month,
-            costs: user.computed_costs[requestMonth]
+            costs: user.computed_costs?.get(requestMonth)
         });
     }
 

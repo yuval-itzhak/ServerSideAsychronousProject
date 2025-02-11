@@ -6,7 +6,22 @@ const handleAsync = require('../utils/handleasync');
 const router = express.Router();
 
 
-// POST route to add a new cost item
+
+/**
+ * POST route to add a new cost item
+ * @route POST /add
+ * @desc Adds a new cost item
+ * @param {Object} req - Express request object
+ * @param {Object} req.body - Request body containing cost details
+ * @param {string} req.body.description - Description of the cost
+ * @param {string} req.body.category - Category of the cost
+ * @param {string} req.body.userId - ID of the user
+ * @param {number} req.body.sum - Amount of the cost (must be a positive number)
+ * @param {string} req.body.date - Date of the cost in YYYY-MM-DD format
+ * @param {Object} res - Express response object
+ * @returns {JSON} The newly created cost object
+ * @throws {Error} If required fields are missing or invalid
+ */
 router.post('/add', handleAsync(async (req, res) => {
     const { description, category, userId, sum, date } = req.body;
     const currentDate = new Date();
@@ -56,9 +71,19 @@ router.post('/add', handleAsync(async (req, res) => {
     res.status(201).json(newCost);
 }));
 
-
-
-// GET report route
+/**
+ * GET report route
+ * @route GET /report
+ * @desc Retrieves a user's cost report for a given month
+ * @param {Object} req - Express request object
+ * @param {Object} req.query - Query parameters
+ * @param {string} req.query.id - User ID
+ * @param {number} req.query.year - Year (YYYY format)
+ * @param {number} req.query.month - Month (1-12)
+ * @param {Object} res - Express response object
+ * @returns {JSON} The monthly cost report organized by category
+ * @throws {Error} If parameters are missing or invalid
+ */
 router.get('/report', handleAsync(async (req, res) => {
     const { id, year, month } = req.query;
 
@@ -72,6 +97,7 @@ router.get('/report', handleAsync(async (req, res) => {
     const numericId = Number(id);
     const numericYear = Number(year);
     const numericMonth = Number(month);
+    const now = new Date();
 
 // Validate ID (must be a number)
     if (isNaN(numericId)) {
@@ -93,6 +119,12 @@ router.get('/report', handleAsync(async (req, res) => {
         error.status = 400;
         throw error;
     }
+    if (numericMonth>now.getMonth() && numericYear>=now.getFullYear()) {
+        const error = new Error('Date in the future is not good');
+        error.status = 400;
+        throw error;
+    }
+
 
 
     const user = await User.findOne({ id });
@@ -103,7 +135,6 @@ router.get('/report', handleAsync(async (req, res) => {
     }
 
     const requestMonth = `${year}-${String(month).padStart(2, "0")}`;
-    const now = new Date();
     const lastDayOfMonth = new Date(year, month, 0);
     const daysSinceEndOfMonth = (now - lastDayOfMonth) / (1000 * 60 * 60 * 24);
 

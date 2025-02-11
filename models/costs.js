@@ -11,9 +11,9 @@ const costSchema = new Schema({
 });
 
 // Create a model based on the cost schema
-const Costs = mongoose.model('costs', costSchema);
+const Cost = mongoose.model('costs', costSchema);
 
-module.exports = Costs;
+module.exports = Cost;
 
 
 

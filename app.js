@@ -1,10 +1,8 @@
-console.log('Happy developing Yuval and Matan ✨')
-
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-const errorHandler = require('./middleware/errorHandler');
+const errorHandler = require('./middleware/errorhandler');
 
 dotenv.config();
 
@@ -22,9 +20,9 @@ mongoose.connect(process.env.MONGO_URI, {
     .catch(err => console.error(err));
 
 // Routes
-app.use('/api', require('./routes/costRoutes'));
-app.use('/api', require('./routes/userRoutes'));
-app.use('/api', require('./routes/aboutRoutes'));
+app.use('/api', require('./routes/costroutes'));
+app.use('/api', require('./routes/userroutes'));
+app.use('/api', require('./routes/aboutroutes'));
 app.use(errorHandler);
 
 // Start Server

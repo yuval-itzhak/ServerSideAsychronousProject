@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Cost = require('../models/costs');
 const User = require('../models/users');
-const handleAsync = require('../utils/handleAsync');
+const handleAsync = require('../utils/handleasync');
 const router = express.Router();
 
 
@@ -68,26 +68,28 @@ router.get('/report', handleAsync(async (req, res) => {
         throw error;
     }
 
+// Convert values to numbers only once
+    const numericId = Number(id);
+    const numericYear = Number(year);
+    const numericMonth = Number(month);
 
-    // Ensure values are not empty and contain only numbers
-    if (!id || isNaN(Number(id))) {
+// Validate ID (must be a number)
+    if (isNaN(numericId)) {
         const error = new Error('ID must contain only numbers.');
         error.status = 400;
         throw error;
     }
 
-    if (!year || isNaN(Number(year))) {
-        const error = new Error('Year must contain only numbers.');
-        error.status = 400;
-        throw error;
-    }
-    if (year < 1000 || year > 9999) {
+// Validate Year (must be a number in YYYY format)
+    if (isNaN(numericYear) || numericYear < 1000 || numericYear > 9999) {
         const error = new Error('Invalid year. Must be in YYYY format.');
         error.status = 400;
         throw error;
     }
-    if (!month || isNaN(Number(month)) || month < 1 || month > 12) {
-        const error = new Error('Month must contain only numbers and real calender date.');
+
+// Validate Month (must be a number between 1-12)
+    if (isNaN(numericMonth) || numericMonth < 1 || numericMonth > 12) {
+        const error = new Error('Month must contain only numbers and be a real calendar month.');
         error.status = 400;
         throw error;
     }

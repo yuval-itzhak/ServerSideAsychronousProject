@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('../models/users');
 const Cost = require('../models/costs');
-const handleAsync = require('../utils/handleAsync');
+const handleAsync = require('../utils/handleasync');
 const router = express.Router();
 
 // GET route to get details of a specific user by their ID

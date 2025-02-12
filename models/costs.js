@@ -9,7 +9,6 @@ const costSchema = new Schema({
     sum: {type: Number, required: true},
     date: {type: Date, required: true, default: Date.now}, // Default value is the current date if not provided
 });
-
 // Create a model based on the cost schema
 const Cost = mongoose.model('costs', costSchema);
 

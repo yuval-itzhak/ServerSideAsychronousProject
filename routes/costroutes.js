@@ -45,7 +45,7 @@ router.post('/add', handleAsync(async (req, res) => {
     const [year, month, day] = date.split('-').map(Number);
     const costDate = new Date(year, month - 1, day);
 
-    // Ensure the date is valid (e.g., prevents "2025-02-30")
+    // Ensure the date is valid
     if (isNaN(costDate.getTime()) || costDate.getFullYear() !== year || costDate.getMonth() !== month - 1 || costDate.getDate() !== day) {
         throw new Error('Invalid date. Ensure it is a real calendar date in YYYY-MM-DD format.');
     }
@@ -119,8 +119,9 @@ router.get('/report', handleAsync(async (req, res) => {
         error.status = 400;
         throw error;
     }
-    if (numericMonth>now.getMonth() && numericYear>=now.getFullYear()) {
-        const error = new Error('Date in the future is not good');
+
+    if (numericMonth>now.getMonth()+1 && numericYear>=now.getFullYear()) {
+        const error = new Error('Date can not be in the future');
         error.status = 400;
         throw error;
     }

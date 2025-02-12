@@ -174,12 +174,6 @@ router.get('/report', handleAsync(async (req, res) => {
             day: new Date(cost.date).getDate()
         });
     });
-    //replacing an empty array with 0
-    categories.forEach(category => {
-        if (!Array.isArray(report[category]) || report[category].length === 0) {
-            report[category] = 0;
-        }
-    });
 
 
 
